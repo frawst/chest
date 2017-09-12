@@ -121,13 +121,17 @@ class Summer:
         self.time_to_run = time() - self.start_time
         print('Done in {}'.format(self.time_to_run))
 
+    def test_moving_towards_center(self):
+        pass
+
 
 def mast():
     s = Summer()
     # s.list_test()
     s.generate_count = 100
-    s.build_test_list()
-    s.test_by_tuples()
+    s.test_moving_towards_center()
+    # s.build_test_list()
+    # s.test_by_tuples()
     s.output_logs()
     # print(s.sets)
     # s.test_outputs(expected_outputs)
