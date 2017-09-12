@@ -42,20 +42,39 @@ Challenge Output
 
 """
 from time import time
+import csv
 
 # test_input = [9, -6, -5, 9, 8, 3, -4, 8, 1, 7, -4, 9, -9, 1, 9, -9, 9, 4, -6, -8]
 # expected_outputs = [(-9, 1, 8), (-8, 1, 7), (-5, -4, 9), (-5, 1, 4), (-4, 1, 3), (-4, -4, 8)]
 
-test_input = [4, 5, -1, -2, -7, 2, -5, -3, -7, -3, 1]
-expected_outputs = [(-7, 2, 5), (-5, 1, 4), (-3, -2, 5), (-3, -1, 4), (-3, 1, 2)]
+# test_input = [4, 5, -1, -2, -7, 2, -5, -3, -7, -3, 1]
+# expected_outputs = [(-7, 2, 5), (-5, 1, 4), (-3, -2, 5), (-3, -1, 4), (-3, 1, 2)]
 
 # expected_outputs = [(-5, -4, 9), (-1, -1, 2)]
+
 
 class Summer:
 
     def __init__(self):
-        self.numbers = test_input
+        self.numbers = []
         self.sets = []
+        self.count = 0
+        self.generate_inputs(100)
+        self.time_to_run = 0
+
+    def generate_inputs(self, q):
+        for i in range(0-q, q+1):
+            if i == 0:
+                pass
+            else:
+                self.numbers.append(i)
+        self.count = len(self.numbers)
+
+    def output_logs(self, file='log.csv'):
+        with open(file, 'a', newline='') as csvfile:
+            spamwriter = csv.writer(csvfile, delimiter=',',
+                                    quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            spamwriter.writerow([self.count, self.time_to_run])
 
     def is_duplicate_set(self, a, b, c):
         if (a, b, c) in self.sets:
@@ -94,11 +113,11 @@ class Summer:
             # print(a, b, c)
             # print('Expected: {}'.format(expected))
             if ((a, b, c) in expected and not (a, b, c) in counted or
-                (a, c, b) in expected and not (a, c, b) in counted or
-                (b, a, c) in expected and not (b, a, c) in counted or
-                (b, c, a) in expected and not (b, c, a) in counted or
-                (c, a, b) in expected and not (c, a, b) in counted or
-                (c, b, a) in expected and not (c, b, a) in counted):
+                            (a, c, b) in expected and not (a, c, b) in counted or
+                            (b, a, c) in expected and not (b, a, c) in counted or
+                            (b, c, a) in expected and not (b, c, a) in counted or
+                            (c, a, b) in expected and not (c, a, b) in counted or
+                            (c, b, a) in expected and not (c, b, a) in counted):
                 count += 1
             else:
                 fail += 1
@@ -106,24 +125,32 @@ class Summer:
         print('Expected: {}  Got: {}  Fails: {}'.format(goal, count, fail))
         print('Fails: {}'.format(fails))
 
+    def list_test(self):
+        a_mark = 0
+        start = time()
+        for i in self.numbers:
+            a_mark += 1
+            b_mark = a_mark
+            for j in self.numbers[a_mark:len(self.numbers)]:
+                b_mark += 1
+                for k in self.numbers[b_mark:len(self.numbers)]:
+                    if self.check_set(i, j, k):
+                        self.sets.append((i, j, k))
+
+        end = time()
+        self.time_to_run = end - start
+
+    def list_test_memo(self):
+        
+
 
 def mast():
-    start = time()
     s = Summer()
-    a_mark = 0
-    for i in s.numbers:
-        a_mark += 1
-        b_mark = a_mark
-        for j in s.numbers[a_mark:len(s.numbers)]:
-            b_mark += 1
-            for k in s.numbers[b_mark:len(s.numbers)]:
-                if s.check_set(i, j, k):
-                    s.sets.append((i, j, k))
-
-    complete = time()
-    print(s.sets)
-    s.test_outputs(expected_outputs)
-    print('Time to complete: {} ms'.format(complete - start))
+    s.list_test()
+    s.output_logs()
+    # print(s.sets)
+    # s.test_outputs(expected_outputs)
+    print(s.time_to_run)
 
 if __name__ == '__main__':
     mast()
